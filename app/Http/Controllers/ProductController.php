@@ -125,7 +125,7 @@ class ProductController extends Controller
         return view('edit', compact('product'));
     }
 
-    public function updateProduct($id)
+    public function updateProduct(Request $request, $id)
     {
         //
         $request->validate([
@@ -136,9 +136,16 @@ class ProductController extends Controller
             'quantity' => 'required',
         ]);
 
-        $update = DB::table('products')->where('id', $products->id)
-                    ->update(['brand' =>$products->brand,'productName' =>$products->productName,'description' =>$products->description,'price' =>$products->price,'quantity' =>$products->quantity]);
+        $update = DB::table('products')->where('id', $id)
+                    ->update(['brand' =>$request->brand,'productName' =>$request->productName,'description' =>$request->description,'price' =>$request->price,'quantity' =>$request->quantity]);
 
         return redirect()->route('home')->with('Success', 'Product Updated Successfully');
+    }
+
+
+    public function deleteProduct($id){
+        $delete = DB::table('products')->where('id', $id)->delete();
+
+        return redirect()->route('home')->with('Success', 'Product Deleted Successfully');
     }
 }
